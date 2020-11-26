@@ -8,13 +8,12 @@ from warnings import warn
 import os
 import sys
 from glob import glob
+import requests
 import tarfile
 import shutil
-import requests
 
 from future.standard_library import install_aliases
 install_aliases()
-from urllib.request import urlretrieve
 
 # use cython if we can import it successfully
 try:
@@ -47,7 +46,7 @@ class sdist(_sdist):
     def run(self):
         try:
             from Cython.Build import cythonize
-            cythonize(os.path.join('pyhsmm','**','*.pyx'), compiler_directives={'language_level' : "3"})
+            cythonize(os.path.join('pyhsmm','**','*.pyx'))
         except:
             warn('Failed to generate extension files from Cython sources')
         finally:
@@ -98,7 +97,7 @@ ext_modules = [
 if use_cython:
     from Cython.Build import cythonize
     try:
-        ext_modules = cythonize(extension_pathspec, compiler_directives={'language_level' : "3"})
+        ext_modules = cythonize(extension_pathspec)
     except:
         warn('Failed to generate extension module code from Cython files')
 
@@ -115,8 +114,8 @@ setup(name='pyhsmm',
       keywords=['bayesian', 'inference', 'mcmc', 'time-series', 'monte-carlo',
                 'variational inference', 'mean field', 'vb'],
       install_requires=[
-          "numpy", "scipy", "matplotlib", "nose", "pybasicbayes >= 0.1.3", "future", "six", "requests"],
-      setup_requires=['numpy', "future", "six", "requests"],
+          "numpy", "scipy", "matplotlib", "nose", "pybasicbayes >= 0.1.3", "future", "six"],
+      setup_requires=['numpy', "future", "six"],
       ext_modules=ext_modules,
       classifiers=[
           'Development Status :: 4 - Beta',
